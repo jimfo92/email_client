@@ -30,6 +30,29 @@
             <input type="submit" class="btn btn-primary"/>
         </form>
     </div>
+
+
+    <div id="em_view">
+        <div>
+            <h1 id="email_subject"></h1>
+        </div>
+        <div>  
+            <button style="margin-bottom: 0.5em;"><a href="#mail-compose.html" class="btn btn-success btn-sm"><i class="fa fa-reply"></i> Reply</a></button>
+        </div>
+        <div>
+            <div>
+                <strong id="email_sender"></strong>
+                to
+                <strong id="email_recivers"></strong>
+            </div>
+            <div>
+                <p id="email_timestamp"></p>
+            </div>
+        </div>
+        <div>
+            <p id="email_body"></p>    
+        </div>
+    </div>
 {% endblock %}
 
 {% block script %}
