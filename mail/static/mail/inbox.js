@@ -62,11 +62,12 @@ function load_mailbox(mailbox) {
   
   // load mailbox
   fetch(`emails/${mailbox}`).then(response => response.json()).then(emails => {
+    console.log('What the fuck');
     console.log(emails);
     emails.forEach(email => {
       let div = document.createElement('div');
       div.className = 'mail_div';
-      div.innerHTML =  `<div><span id="sender">${email.sender}</span> <span id="subject">${email.subject}</span>
+      div.innerHTML = `<div><span id="sender">${email.sender}</span> <span id="subject">${email.subject}</span>
       <span id="timestamp">${email.timestamp}</span></div>`;
 
       //if the email is unread make background gray
@@ -75,6 +76,7 @@ function load_mailbox(mailbox) {
       }
       document.querySelector('#emails-view').appendChild(div);
       div.addEventListener('click', function() {
+        console.log('What the fuck222222222');
         load_email(email.id, mailbox);
       })
     });
@@ -92,6 +94,12 @@ function load_email(email_id, mailbox) {
     document.querySelector('#archived_button').style.display = 'block';
   }
 
+  if (mailbox === 'archive') {
+    document.querySelector('#archived_button').style.display = 'block';
+  }
+
+  let is_archived; //passing it to archive_manager
+
   //fetch email details
   fetch(`emails/${email_id}`).then(response => response.json()).then(data => {
     console.log(data);
@@ -99,7 +107,8 @@ function load_email(email_id, mailbox) {
     document.querySelector('#email_sender').innerHTML = data.sender;
     document.querySelector('#email_recivers').innerHTML = data.recipients;
     document.querySelector('#email_body').innerHTML = data.body;
-    document.querySelector('#email_timestamp').innerHTML = data.timestamp;    
+    document.querySelector('#email_timestamp').innerHTML = data.timestamp;
+    is_archived = data.archived;    
   });
 
   //mark email as read
@@ -112,14 +121,32 @@ function load_email(email_id, mailbox) {
 
   //Click listener for archive button
   document.querySelector('#archived_button').addEventListener('click', () => {
-    archive_manager(email_id);
+    archive_manager(email_id, is_archived);
   })
 }
 
-function archive_manager(email_id) {
-  
+function archive_manager(email_id, is_archived) {
+  //if (!is_archived) {
+    //fetch(`emails/${email_id}`, {
+      //method: 'PUT',
+      //body: JSON.stringify({
+          //archived: true
+      //})
+    //}).then(response => {
+      //console.log(response);
+      //document.querySelector('#archived_button').innerHTML = 'Unarchive';
+      //load_mailbox('inbox');
+      //return;
+    //})
+  //}
 
   //email is archived, change it and call mailbox('inbox')
-  condition.innerHTML = 'Archived';
-
+  fetch(`emails/${email_id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        archived: false
+    })
+  }).then( () => {
+    load_mailbox('inbox');
+  })
 }
