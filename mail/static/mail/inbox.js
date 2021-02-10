@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
   //document.querySelector('#mail_view')
 
   // When form submited, take values and send them to /emails
-  document.querySelector('#compose-form').onsubmit = () => {
+  document.querySelector('#compose-form').onsubmit = function() {
     let recipient_list = document.querySelector('#compose-recipients').value;
     let sb = document.querySelector('#compose-subject').value;
     let bd = document.querySelector('#compose-body').value;
@@ -62,7 +62,6 @@ function load_mailbox(mailbox) {
   
   // load mailbox
   fetch(`emails/${mailbox}`).then(response => response.json()).then(emails => {
-    console.log('What the fuck');
     console.log(emails);
     emails.forEach(email => {
       let div = document.createElement('div');
@@ -74,11 +73,10 @@ function load_mailbox(mailbox) {
       if (email.read === true) {
         div.style.background = "#d3d3d3" ;
       }
-      document.querySelector('#emails-view').appendChild(div);
-      div.addEventListener('click', function() {
-        console.log('What the fuck222222222');
+      document.querySelector('#emails-view').append(div);
+      div.onclick = function() {
         load_email(email.id, mailbox);
-      })
+      }
     });
   })
 }
@@ -88,17 +86,22 @@ function load_email(email_id, mailbox) {
   document.querySelector('#compose-view').style.display = 'none';
   document.querySelector('#em_view').style.display = 'block';
 
-  //set archived button if we are to inbox mailbox
-  document.querySelector('#archived_button').style.display = 'none';
+  //set archive and unarchive button to inbox and archive accordingly
   if (mailbox === 'inbox') {
-    document.querySelector('#archived_button').style.display = 'block';
+    document.querySelector('#archive_button').style.display = 'block';
+    document.querySelector('#unarchive_button').style.display = 'none';
+    document.querySelector('#archive_button').onclick = function() {
+      archive_mail(email_id);
+    }
   }
 
   if (mailbox === 'archive') {
-    document.querySelector('#archived_button').style.display = 'block';
+    document.querySelector('#unarchive_button').style.display = 'block';
+    document.querySelector('#archive_button').style.display = 'none';
+    document.querySelector('#unarchive_button').onclick = function() {
+      unarchive_mail(email_id);
+    }
   }
-
-  let is_archived; //passing it to archive_manager
 
   //fetch email details
   fetch(`emails/${email_id}`).then(response => response.json()).then(data => {
@@ -108,7 +111,6 @@ function load_email(email_id, mailbox) {
     document.querySelector('#email_recivers').innerHTML = data.recipients;
     document.querySelector('#email_body').innerHTML = data.body;
     document.querySelector('#email_timestamp').innerHTML = data.timestamp;
-    is_archived = data.archived;    
   });
 
   //mark email as read
@@ -118,35 +120,28 @@ function load_email(email_id, mailbox) {
         read: true
     })
   })
+}
 
-  //Click listener for archive button
-  document.querySelector('#archived_button').addEventListener('click', () => {
-    archive_manager(email_id, is_archived);
+function archive_mail(email_id) {
+  fetch(`emails/${email_id}`, {
+    method: 'PUT',
+    body: JSON.stringify({
+        archived: true
+    })
+  }).then(function(response) {
+    console.log(response);
+    load_mailbox('inbox');
   })
 }
 
-function archive_manager(email_id, is_archived) {
-  //if (!is_archived) {
-    //fetch(`emails/${email_id}`, {
-      //method: 'PUT',
-      //body: JSON.stringify({
-          //archived: true
-      //})
-    //}).then(response => {
-      //console.log(response);
-      //document.querySelector('#archived_button').innerHTML = 'Unarchive';
-      //load_mailbox('inbox');
-      //return;
-    //})
-  //}
-
-  //email is archived, change it and call mailbox('inbox')
+function unarchive_mail(email_id) {
   fetch(`emails/${email_id}`, {
     method: 'PUT',
     body: JSON.stringify({
         archived: false
     })
-  }).then( () => {
+  }).then(function(response) {
+    console.log(response);
     load_mailbox('inbox');
   })
 }
