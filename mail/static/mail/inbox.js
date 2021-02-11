@@ -103,6 +103,16 @@ function load_email(email_id, mailbox) {
     }
   }
 
+  if (mailbox === 'sent') {
+    document.querySelector('#unarchive_button').style.display = 'none';
+    document.querySelector('#archive_button').style.display = 'none';
+  }
+
+  //clickListener for Reply button
+  document.querySelector('#reply').onclick = function() {
+    reply(email_id);
+  }
+
   //fetch email details
   fetch(`emails/${email_id}`).then(response => response.json()).then(data => {
     console.log(data);
@@ -143,5 +153,20 @@ function unarchive_mail(email_id) {
   }).then(function(response) {
     console.log(response);
     load_mailbox('inbox');
+  })
+}
+
+function reply(email_id) {
+  fetch(`emails/${email_id}`).then(response => response.json()).then(data => {
+    console.log(data);
+    compose_email();
+    document.querySelector('#compose-recipients').value = data.sender;
+
+    //fill the subject with the subject of the original email
+    if (data.subject.substring(0, 2) === 'Re') {
+        document.querySelector('#compose-subject').value = data.subject;
+    } else {
+        document.querySelector('#compose-subject').value = `Re: ${data.subject}`;
+    }
   })
 }
