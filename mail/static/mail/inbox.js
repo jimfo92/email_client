@@ -168,5 +168,10 @@ function reply(email_id) {
     } else {
         document.querySelector('#compose-subject').value = `Re: ${data.subject}`;
     }
+
+    document.querySelector('#compose-body').value = `On ${data.timestamp} ${data.sender} wrote: 
+    
+    ${data.body}
+    ---------------------------------`;
   })
 }
