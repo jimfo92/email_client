@@ -11,6 +11,5 @@ A front-end for an email client that makes API calls to send and receive emails.
   
 ## To run the application
   - Install ***Django Environ*** for Django enviroment variables with ***pip3 install django-environ***
-  - Install the ***Requests*** Module for query external api in the server side with ***pip3 install requests***
   - ***python3 manage.py runserver*** to run the app
 
