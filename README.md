@@ -1,6 +1,6 @@
-# front-end-for-email-client
+# email_client
 
-A front-end for an email client that makes API calls to send and receive emails.
+Email client that makes API calls to send and receive emails.
 
 ## Features
   - Register and login.
