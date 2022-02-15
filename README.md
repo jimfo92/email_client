@@ -1,5 +1,4 @@
 # email_client
-
 Single-page-app email client that makes API calls to send and receive emails.
 
 ## Features
@@ -17,4 +16,3 @@ Single-page-app email client that makes API calls to send and receive emails.
   
   python manage.py runserver
   ```
-
