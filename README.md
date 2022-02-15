@@ -1,6 +1,6 @@
 # email_client
 
-Email client that makes API calls to send and receive emails.
+Single-page-app email client that makes API calls to send and receive emails.
 
 ## Features
   - Register and login.
@@ -9,6 +9,12 @@ Email client that makes API calls to send and receive emails.
   - View Email.
   - Reply Email.
   
-## To run the application
-  - ***python3 manage.py runserver*** to run the app
+## Install
+  In your terminal, cd into the project directory.
+  ```
+  python manage.py makemigrations
+  python manage.py migrate
+  
+  python manage.py runserver
+  ```
 
