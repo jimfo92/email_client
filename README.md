@@ -9,7 +9,7 @@ Single-page-app email client that makes API calls to send and receive emails.
   - Reply Email.
   
 ## Install
-  In your terminal, cd into the project directory.
+  In your terminal, `cd` into the project directory.
   ```
   python manage.py makemigrations
   python manage.py migrate
